@@ -127,6 +127,7 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
     protected float mGestureDownBrightness;
     protected long mSeekTimePosition;
     boolean tmp_test_back = false;
+    protected boolean seekingEnabled = true;
 
     public JZVideoPlayer(Context context) {
         super(context);
@@ -371,7 +372,7 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
 
         startButton.setOnClickListener(this);
         fullscreenButton.setOnClickListener(this);
-        progressBar.setOnSeekBarChangeListener(this);
+        progressBar.setOnSeekBarChangeListener(seekingEnabled ? this : null);
         bottomContainer.setOnClickListener(this);
         textureViewContainer.setOnClickListener(this);
         textureViewContainer.setOnTouchListener(this);
@@ -578,7 +579,8 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
                     dismissProgressDialog();
                     dismissVolumeDialog();
                     dismissBrightnessDialog();
-                    if (mChangePosition) {
+                    Log.e(TAG, "seeking enabled: " + seekingEnabled);
+                    if (mChangePosition && seekingEnabled) {
                         onEvent(JZUserAction.ON_TOUCH_SCREEN_SEEK_POSITION);
                         JZMediaManager.seekTo(mSeekTimePosition);
                         long duration = getDuration();
@@ -992,6 +994,7 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
             jzVideoPlayer.setUp(dataSourceObjects, currentUrlMapIndex, JZVideoPlayerStandard.SCREEN_WINDOW_FULLSCREEN, objects);
             jzVideoPlayer.setState(currentState);
             jzVideoPlayer.addTextureView();
+            jzVideoPlayer.setSeekingEnabled(this.seekingEnabled);
             JZVideoPlayerManager.setSecondFloor(jzVideoPlayer);
 //            final Animation ra = AnimationUtils.loadAnimation(getContext(), R.anim.start_fullscreen);
 //            jzVideoPlayer.setAnimation(ra);
@@ -1129,6 +1132,11 @@ public abstract class JZVideoPlayer extends FrameLayout implements View.OnClickL
 
     public void dismissBrightnessDialog() {
 
+    }
+
+    public void setSeekingEnabled(boolean enabled) {
+        this.seekingEnabled = enabled;
+        progressBar.setOnSeekBarChangeListener(seekingEnabled ? this : null);
     }
 
     public static class JZAutoFullscreenListener implements SensorEventListener {

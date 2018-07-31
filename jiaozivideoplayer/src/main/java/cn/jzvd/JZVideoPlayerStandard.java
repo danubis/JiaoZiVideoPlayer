@@ -68,6 +68,7 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
     public static long LAST_GET_BATTERYLEVEL_TIME = 0;
     public static int LAST_GET_BATTERYLEVEL_PERCENT = 70;
 
+
     private BroadcastReceiver battertReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -145,7 +146,6 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
             clarity.setVisibility(View.GONE);
         }
         setSystemTimeAndBattery();
-
 
         if (tmp_test_back) {
             tmp_test_back = false;
