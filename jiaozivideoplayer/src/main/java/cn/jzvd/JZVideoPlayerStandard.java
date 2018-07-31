@@ -831,6 +831,10 @@ public class JZVideoPlayerStandard extends JZVideoPlayer {
         }
     }
 
+    public Object[] getObjects() {
+        return objects;
+    }
+
     public class DismissControlViewTimerTask extends TimerTask {
 
         @Override
